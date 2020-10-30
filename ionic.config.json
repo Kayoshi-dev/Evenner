@@ -1,0 +1,7 @@
+{
+  "name": "EvennerSetup",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
