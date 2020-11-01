@@ -4,9 +4,8 @@
       <ion-menu content-id="main-content" type="overlay">
         <ion-content>
           <ion-list id="inbox-list">
-            <ion-list-header>Inbox</ion-list-header>
-            <ion-note>hi@ionicframework.com</ion-note>
-  
+            <ion-list-header>Evenner</ion-list-header>
+
             <ion-menu-toggle auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
@@ -31,10 +30,10 @@
 </template>
 
 <script lang="ts">
-import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
+import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, homeOutline, homeSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'App',
@@ -48,18 +47,17 @@ export default defineComponent({
     IonListHeader, 
     IonMenu, 
     IonMenuToggle, 
-    IonNote, 
-    IonRouterOutlet, 
+    IonRouterOutlet,
     IonSplitPane,
   },
   setup() {
     const selectedIndex = ref(0);
     const appPages = [
       {
-        title: 'Inbox',
-        url: '/folder/Inbox',
-        iosIcon: mailOutline,
-        mdIcon: mailSharp
+        title: 'Accueil',
+        url: '/folder/home',
+        iosIcon: homeOutline,
+        mdIcon: homeSharp
       },
       {
         title: 'Outbox',
@@ -111,8 +109,8 @@ export default defineComponent({
       bookmarkSharp, 
       heartOutline, 
       heartSharp, 
-      mailOutline, 
-      mailSharp, 
+      homeOutline,
+      homeSharp,
       paperPlaneOutline, 
       paperPlaneSharp, 
       trashOutline, 
@@ -244,5 +242,9 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+ion-list-header {
+  padding-bottom: 1rem;
 }
 </style>
