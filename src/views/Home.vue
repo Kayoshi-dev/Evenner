@@ -37,19 +37,51 @@
           </div>
         </ion-card>
 
+        <h2>Près de chez moi</h2>
+        <ion-slides :options="slideOpts">
+          <ion-slide v-for="x of 50" :key="x">
+            <ion-card class="">
+              <ion-img src="https://assets.puzzlefactory.pl/puzzle/247/857/original.jpg"></ion-img>
+              <ion-card-header>
+                <ion-card-title>Journée Japon {{x}}</ion-card-title>
+                <ion-card-subtitle><ion-icon :icon="locationOutline" class="margin-right"></ion-icon>Grenoble</ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                Keep close to Nature's heart... and break clear away.
+              </ion-card-content>
+            </ion-card>
+          </ion-slide>
+        </ion-slides>
+
         <h2>Plus de sorties</h2>
+        <ion-grid>
+          <ion-row class="ion-justify-content-between">
+            <FlatButton title="Plus de sorties" color="orange" margin="true" icon="peopleOutline"/>
+            <FlatButton title="Voir mes sorties" color="blue" icon=""/>
+          </ion-row>
+
+          <ion-row>
+            <FlatButton title="Mon entourage" color="purple" margin="true" icon=""/>
+            <FlatButton title="Mes précédentes sorties" color="green" icon=""/>
+          </ion-row>
+        </ion-grid>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import { IonButtons, IonContent, IonButton, IonHeader, IonMenuToggle, IonPage, IonToolbar, IonImg, IonCard, IonIcon, IonTitle, IonAvatar, IonRippleEffect} from '@ionic/vue';
-import {qrCodeOutline, qrCodeSharp} from 'ionicons/icons';
+import { IonButtons, IonContent, IonButton, IonHeader, IonMenuToggle, IonPage, IonToolbar, IonImg, IonCard, IonIcon, IonTitle, IonAvatar, IonRippleEffect, IonGrid, IonRow, IonSlides, IonSlide, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle} from '@ionic/vue';
+import { qrCodeOutline, qrCodeSharp, locationOutline} from 'ionicons/icons';
+import FlatButton from '../components/FlatButton';
 
 export default {
   name: 'Home',
   components: {
+    FlatButton,
+    IonSlides,
+    IonSlide,
     IonButtons,
     IonIcon,
     IonButton,
@@ -60,30 +92,40 @@ export default {
     IonPage,
     IonImg,
     IonCard,
+    IonCardTitle,
+    IonCardHeader,
+    IonCardContent,
     IonTitle,
     IonAvatar,
-    IonRippleEffect
+    IonRippleEffect,
+    IonGrid,
+    IonRow,
+    IonCardSubtitle
   },
   setup() {
+    const slideOpts = {
+      slidesPerView: 1.5
+    };
     return {
-      qrCodeOutline, qrCodeSharp
+      qrCodeOutline,
+      qrCodeSharp,
+      locationOutline,
+      slideOpts
     }
   }
 }
 </script>
 
 <style scoped>
-@font-face {
-  font-family: 'Gilroy';
-  src: url('/assets/fonts/Gilroy-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-}
 
 ion-title, h2 {
   font-family: 'Gilroy', sans-serif;
   font-weight: 600;
   color: black;
+}
+
+.margin-right {
+  margin-right: 5px;
 }
 
 h2 {
@@ -100,7 +142,7 @@ ion-buttons {
   margin-right: 0;
 }
 
-ion-card {
+.main-card {
   margin: 0;
   border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
@@ -124,10 +166,6 @@ ion-avatar {
 
 ion-menu-toggle {
   overflow: hidden;
-}
-
-.icon-padding {
-
 }
 
 .center-content {
