@@ -1,13 +1,13 @@
 <template>
   <ion-col class="flat-button" :class="[`--${color}`, margin ? 'margin-right' : '']">
+    <ion-icon :icon="peopleOutline"></ion-icon>
     <ion-card>
-      <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
       <h3>{{title}}</h3>
     </ion-card>
   </ion-col>
 </template>
 
-<script lang="ts">
+<script>
 import {IonCol, IonIcon, IonCard} from '@ionic/vue';
 import {peopleOutline} from 'ionicons/icons';
 
@@ -36,18 +36,18 @@ export default {
       type: String
     }
   },
-  setup() {
-    return {
-      peopleOutline
-    }
-  },
   computed: {
-    getIcon(): string {
+    getIcon() {
       if(this.icon === "peopleOutline") {
         return peopleOutline
       }
 
       return "";
+    }
+  },
+  data() {
+    return {
+      peopleOutline
     }
   }
 }
@@ -64,19 +64,26 @@ export default {
     font-family: 'Gilroy', sans-serif;
 
     &.--orange {
+      background: url("https://image.freepik.com/vecteurs-libre/fond-paysage-montagne-au-coucher-du-soleil-illustration-vectorielle_16058-10.jpg");
       background: rgba(230, 126, 34, 0.8);
     }
 
     &.--blue {
-      background: rgba(52, 152, 219, 0.8);
+      background: rgba(52, 152, 219, 0.8) url("https://image.freepik.com/vecteurs-libre/fond-paysage-montagne-au-coucher-du-soleil-illustration-vectorielle_16058-10.jpg");
     }
 
     &.--purple {
-      background: rgba(155, 89, 182, 0.8);
+      background: rgba(155, 89, 182, 0.8) url(https://image.freepik.com/vecteurs-libre/illustration-concept-festivites_114360-4146.jpg) center ;
     }
 
     &.--green {
-      background: rgba(46, 204, 113, 0.8);
+      background: rgba(46, 204, 113, 0.8) url("https://image.freepik.com/vecteurs-libre/illustration-vectorielle-paysage-montagne_1441-78.jpg") 200px 200px;
+    }
+
+    ion-card {
+      background: none !important;
+      color: white;
+      box-shadow: none;
     }
   }
 

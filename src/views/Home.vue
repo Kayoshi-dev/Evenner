@@ -58,12 +58,12 @@
         <ion-grid>
           <ion-row class="ion-justify-content-between">
             <FlatButton title="Plus de sorties" color="orange" margin="true" icon="peopleOutline"/>
-            <FlatButton title="Voir mes sorties" color="blue" icon=""/>
+            <FlatButton title="Voir mes sorties" color="blue" icon="peopleOutline"/>
           </ion-row>
 
           <ion-row>
-            <FlatButton title="Mon entourage" color="purple" margin="true" icon=""/>
-            <FlatButton title="Mes précédentes sorties" color="green" icon=""/>
+            <FlatButton title="Mon entourage" color="purple" margin="true" icon="peopleOutline"/>
+            <FlatButton title="Mes précédentes sorties" color="green" icon="peopleOutline"/>
           </ion-row>
         </ion-grid>
       </div>
@@ -143,15 +143,11 @@ ion-buttons {
 }
 
 .main-card {
-  margin: 0;
   border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   max-height: 200px;
   font-family: "Gilroy Light", sans-serif;
-}
-
-.main-card {
-  margin-bottom: 30px;
+  margin: 0 0 30px;
 }
 
 ion-img {
