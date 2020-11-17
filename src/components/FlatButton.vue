@@ -57,23 +57,23 @@ export default {
   @import "../theme/global";
 
   .flat-button {
-    border-radius: 12px;
+    border-radius: 15px;
     padding: 5px;
     margin-bottom: 10px;
     height: 200px;
     font-family: 'Gilroy', sans-serif;
 
     &.--orange {
-      background: url("https://image.freepik.com/vecteurs-libre/fond-paysage-montagne-au-coucher-du-soleil-illustration-vectorielle_16058-10.jpg");
-      background: rgba(230, 126, 34, 0.8);
+      background: rgba(230, 126, 34, 0.8) url("https://image.freepik.com/vecteurs-libre/fond-paysage-montagne-au-coucher-du-soleil-illustration-vectorielle_16058-10.jpg") 200px 300px;
+
     }
 
     &.--blue {
-      background: rgba(52, 152, 219, 0.8) url("https://image.freepik.com/vecteurs-libre/fond-paysage-montagne-au-coucher-du-soleil-illustration-vectorielle_16058-10.jpg");
+      background: rgba(52, 152, 219, 0.8) url("https://image.freepik.com/vecteurs-libre/faune-illustration-vectorielle-plane-photographe-nature-paysage-minimaliste-silhouette-loup_71609-1546.jpg") 200px;
     }
 
     &.--purple {
-      background: rgba(155, 89, 182, 0.8) url(https://image.freepik.com/vecteurs-libre/illustration-concept-festivites_114360-4146.jpg) center ;
+      background: rgba(155, 89, 182, 0.8) url(https://image.freepik.com/vecteurs-libre/groupe-jeunes-aide-baton-selfie-prenant-photo-amis-appareil-photo-smartphone-debout-ensemble-ville-parc-urbain-lever-du-soleil-paysage-fond-pleine-longueur-illustration-vectorielle-horizontale_48369-25742.jpg) 450px;
     }
 
     &.--green {

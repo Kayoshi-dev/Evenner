@@ -12,7 +12,7 @@
           <ion-button>
             <ion-icon slot="icon-only" :icon="qrCodeSharp"></ion-icon>
           </ion-button>
-          <ion-avatar>
+          <ion-avatar @click="() => router.push('/profile')">
             <ion-img src="https://avatars2.githubusercontent.com/u/28494879?s=400&u=c38339379d45c8055e3c4a4a3ce7eb8741a6b258&v=4" class="icon-padding" alt="Avatar"></ion-img>
             <ion-ripple-effect type="unbounded"></ion-ripple-effect>
           </ion-avatar>
@@ -75,6 +75,7 @@
 import { IonButtons, IonContent, IonButton, IonHeader, IonMenuToggle, IonPage, IonToolbar, IonImg, IonCard, IonIcon, IonTitle, IonAvatar, IonRippleEffect, IonGrid, IonRow, IonSlides, IonSlide, IonCardHeader, IonCardContent, IonCardTitle, IonCardSubtitle} from '@ionic/vue';
 import { qrCodeOutline, qrCodeSharp, locationOutline} from 'ionicons/icons';
 import FlatButton from '../components/FlatButton';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'Home',
@@ -103,6 +104,7 @@ export default {
     IonCardSubtitle
   },
   setup() {
+    const router = useRouter();
     const slideOpts = {
       slidesPerView: 1.5
     };
@@ -110,7 +112,8 @@ export default {
       qrCodeOutline,
       qrCodeSharp,
       locationOutline,
-      slideOpts
+      slideOpts,
+      router
     }
   }
 }
@@ -143,11 +146,14 @@ ion-buttons {
 }
 
 .main-card {
-  border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   max-height: 200px;
   font-family: "Gilroy Light", sans-serif;
   margin: 0 0 30px;
+}
+
+ion-card {
+  border-radius: 15px;
 }
 
 ion-img {

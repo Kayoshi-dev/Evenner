@@ -13,6 +13,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/folder/:id',
     component: () => import ('../views/Folder.vue')
+  },
+  {
+    path: '/profile',
+    component: () => import('@/views/UserProfile.vue')
   }
 ]
 
