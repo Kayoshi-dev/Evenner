@@ -1,0 +1,13 @@
+.navbar-light .navbar-toggler-icon {
+  background-image: url("/hamburger-icon.svg");
+}
+
+.navbar-light .navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler {
+  &:focus {
+    box-shadow: none;
+  }
+}

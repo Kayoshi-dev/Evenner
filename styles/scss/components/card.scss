@@ -1,0 +1,22 @@
+.card {
+  border-radius: 15px;
+  border: none;
+  transition: transform 0.3s;
+
+  img {
+    max-height: 30vh;
+    object-fit: cover;
+    border-radius: 15px;
+  }
+
+  .card-img-overlay {
+    top: auto;
+    background-image: linear-gradient(0deg, black, transparent);
+    border-radius: 0 0 15px 15px;
+    width: 100%;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
