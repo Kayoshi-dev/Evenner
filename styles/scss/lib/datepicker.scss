@@ -1,0 +1,45 @@
+@import "../variables";
+
+.react-datepicker {
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.react-datepicker__header {
+  background-color: white;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.react-datepicker,
+.react-datepicker__header {
+  border-radius: 12px;
+}
+
+.react-datepicker__day--today {
+  background-color: white;
+  color: black;
+  border: 2px solid $input-focus-border;
+  border-radius: 12px;
+  color: $input-focus-border;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.react-datepicker__triangle {
+  display: none;
+}
+
+.react-datepicker__day {
+  font-weight: bold;
+}
+
+.react-datepicker__day--outside-month {
+  color: #999999;
+}
+
+.react-datepicker__day-name {
+  color: #999999;
+}

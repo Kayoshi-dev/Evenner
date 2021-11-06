@@ -1,0 +1,33 @@
+@import "../variables";
+
+.ql-snow {
+  &.ql-toolbar {
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+
+  &.ql-container {
+    border-radius: 0 0 0.25rem 0.25rem;
+  }
+
+  // &:focus-within {
+  //   border-color: $input-focus-border;
+  // }
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  background: $input-bg;
+  border-color: $input-border;
+
+  &:focus-within {
+    background: white;
+  }
+}
+
+.ql-editor {
+  min-height: 10em;
+}
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+  border-color: transparent;
+}
