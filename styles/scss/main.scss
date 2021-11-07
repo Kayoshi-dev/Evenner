@@ -2,9 +2,14 @@
 @import "./components/navbar.scss";
 @import "./components/input.scss";
 @import "./components/fonts.scss";
+@import "./components/dropzone.scss";
 
 @import "./lib/quill.scss";
 @import "./lib/datepicker.scss";
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/utilities";
 
 h3 {
   font-family: "Quicksand", sans-serif;

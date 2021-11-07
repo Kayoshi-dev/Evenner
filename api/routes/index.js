@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-const routes = Router();
+import EventRoute from "./EventRoute";
 
-routes.get('/test', (req, res) => {
-    res.send('test')
-})
+const router = Router();
 
-export default routes;
+router.use("/event", EventRoute);
+
+export default router;

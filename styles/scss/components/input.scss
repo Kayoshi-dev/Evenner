@@ -1,7 +1,24 @@
 @import "../variables";
 
-.form-control {
+.mantine-TextInput-label,
+.mantine-MultiSelect-label,
+.mantine-InputWrapper-label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.mantine-Checkbox-label {
+  @extend .mantine-TextInput-label;
+  margin-bottom: 0;
+}
+
+.mantine-TextInput-input {
   background: $input-bg;
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 4px;
+  padding: 0.375rem 0.75rem;
 
   border: 1px solid $input-border;
 
@@ -13,7 +30,38 @@
   }
 }
 
-label {
-  font-weight: bold;
-  font-size: 1.1em;
+.mantine-MultiSelect-input {
+  background-color: $input-bg;
+  border: 1px solid $input-border;
+  font-size: 1rem;
+
+  &:focus {
+    border-color: $input-focus-border;
+    outline: 0;
+    box-shadow: none;
+    background: white;
+  }
+}
+
+.mantine-MultiSelect-values {
+  padding: 0;
+}
+
+.mantine-MultiSelect-searchInputEmpty {
+  font-size: 1rem;
+}
+
+.mantine-MultiSelect-value {
+  .mantine-MultiSelect-label {
+    margin-bottom: 0;
+  }
+}
+
+.mantine-MultiSelect-defaultValue.mantine-MultiSelect-value {
+  background-color: darken($input-bg, $amount: 20);
+  font-size: 1rem;
+
+  .mantine-MultiSelect-label {
+    font-weight: normal;
+  }
 }

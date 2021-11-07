@@ -11,7 +11,12 @@ datasource db {
 }
 
 model Event {
-  id          String @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
   description String
+  startDate   DateTime
+  endDate     DateTime
+  place       String
+  attendees   String[]
+  isPrivate   Boolean
 }

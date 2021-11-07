@@ -2,11 +2,12 @@
 
 .react-datepicker {
   border-color: transparent;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: rgb(0 0 0 / 5%) 0px 1px 3px, rgb(0 0 0 / 5%) 0px 28px 23px -7px,
+    rgb(0 0 0 / 4%) 0px 12px 12px -7px;
 }
 
 .react-datepicker__header {
-  background-color: white;
+  background-color: $input-bg;
   border-bottom: none;
   padding-bottom: 0;
 }
@@ -42,4 +43,27 @@
 
 .react-datepicker__day-name {
   color: #999999;
+}
+
+.react-datepicker__day--selected {
+  background-color: $input-focus-border;
+  color: black;
+}
+
+.react-datepicker__current-month {
+  padding-bottom: 1em;
+}
+
+.react-datepicker__navigation-icon::before {
+  top: 13px;
+}
+
+.react-datepicker__day--in-selecting-range {
+  background-color: $input-focus-border;
+  color: black;
+}
+
+.react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range) {
+  background-color: darken($color: $input-focus-border, $amount: 40);
+  color: white;
 }

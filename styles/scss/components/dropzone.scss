@@ -1,0 +1,12 @@
+.mantine-Dropzone-root {
+  border-radius: 12px;
+  background-color: $input-bg;
+
+  img {
+    border-radius: 12px;
+  }
+
+  &:hover {
+    background-color: white;
+  }
+}

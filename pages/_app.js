@@ -1,6 +1,10 @@
 import { SSRProvider } from "@react-aria/ssr";
+import { registerLocale } from "react-datepicker";
+import { NotificationsProvider } from "@mantine/notifications";
+import { MantineProvider, Button } from "@mantine/core";
+
 import Layout from "../components/layout";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
+
 import fr from "date-fns/locale/fr";
 
 registerLocale("fr", fr);
@@ -14,9 +18,13 @@ import "../styles/scss/main.scss";
 function MyApp({ Component, pageProps }) {
   return (
     <SSRProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <MantineProvider theme={{ fontFamily: "Quicksand" }}>
+        <NotificationsProvider position='top-right'>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </NotificationsProvider>
+      </MantineProvider>
     </SSRProvider>
   );
 }
