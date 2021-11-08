@@ -2,7 +2,8 @@
 
 .mantine-TextInput-label,
 .mantine-MultiSelect-label,
-.mantine-InputWrapper-label {
+.mantine-InputWrapper-label,
+.mantine-Autocomplete-label {
   margin-bottom: 5px;
   font-weight: bold;
   font-size: 1.1em;
@@ -13,7 +14,8 @@
   margin-bottom: 0;
 }
 
-.mantine-TextInput-input {
+.mantine-TextInput-input,
+.mantine-Autocomplete-input {
   background: $input-bg;
   width: 100%;
   font-size: 1rem;

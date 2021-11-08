@@ -14,10 +14,12 @@ import {
   MultiSelect,
   Checkbox,
   InputWrapper,
+  Autocomplete,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { CameraIcon, UploadIcon, CrossCircledIcon } from "@modulz/radix-icons";
 import format from "date-fns/format";
+import axios from "axios";
 
 let QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
   ssr: false,
@@ -25,7 +27,11 @@ let QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
 
 export default function Newcreate() {
   const [currentHeader, setCurrentHeader] = useState("");
+  const [searchCity, setSearchCity] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [attendees, setAttendees] = useState([]);
+
+  const data = [...new Set(suggestions)];
 
   const theme = useMantineTheme();
 
@@ -50,7 +56,7 @@ export default function Newcreate() {
       endDate: (endDate) =>
         format(endDate, "dd/MM/yyyy") >=
         format(form.values.startDate, "dd/MM/yyyy"),
-      place: (place) => place.trim().length > 2,
+      place: (place) => place !== null,
     },
   });
 
@@ -60,6 +66,20 @@ export default function Newcreate() {
       form.setFieldValue("endDate", form.values.startDate);
     }
   }, [form]);
+
+  useEffect(() => {
+    const loadSuggestion = async () => {
+      const response = await axios.get(
+        `https://api-adresse.data.gouv.fr/search/?q=${searchCity}&type=municipality`
+      );
+
+      setSuggestions(response.data.features.map((a) => a.properties.city));
+    };
+
+    if (searchCity) {
+      loadSuggestion();
+    }
+  }, [searchCity]);
 
   // Update the icon displayed based on the file dragged
   const ImageUploadIcon = ({ status, ...props }) => {
@@ -242,18 +262,14 @@ export default function Newcreate() {
           </Col>
         </Grid>
 
-        <TextInput
-          placeholder='Paris, 13ème arrondissement'
-          label="Lieu de l'évènement"
-          value={form.values.place}
-          onChange={(event) =>
-            form.setFieldValue("place", event.currentTarget.value)
-          }
-          error={
-            form.errors.place && "Veuillez renseigner le lieu de l'évènement"
-          }
-          className='mb-3'
+        <Autocomplete
+          value={searchCity}
+          onChange={setSearchCity}
+          label='Indiquez le lieu de rendez-vous'
+          placeholder='Paris, Grenoble, Amiens...'
           required
+          data={data}
+          className='mb-3'
         />
 
         <MultiSelect
