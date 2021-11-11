@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { useForm } from "@mantine/hooks";
+import { useState, useEffect, forwardRef, useRef } from "react";
+import { useForm, useDebouncedValue } from "@mantine/hooks";
 import DatePicker from "react-datepicker";
 import {
   TextInput,
@@ -16,23 +15,26 @@ import {
   InputWrapper,
   Autocomplete,
 } from "@mantine/core";
+import RichTextEditor from "../../components/QuillEditor";
 import { Dropzone } from "@mantine/dropzone";
-import { CameraIcon, UploadIcon, CrossCircledIcon } from "@modulz/radix-icons";
+import { useNotifications } from "@mantine/notifications";
+import {
+  CameraIcon,
+  UploadIcon,
+  CrossCircledIcon,
+  CheckIcon,
+} from "@modulz/radix-icons";
 import format from "date-fns/format";
 import axios from "axios";
 
-let QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
-  ssr: false,
-});
-
 export default function Newcreate() {
   const [currentHeader, setCurrentHeader] = useState("");
-  const [searchCity, setSearchCity] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [attendees, setAttendees] = useState([]);
 
-  const data = [...new Set(suggestions)];
+  const dropZoneRef = useRef();
 
+  const notifications = useNotifications();
   const theme = useMantineTheme();
 
   const form = useForm({
@@ -42,7 +44,9 @@ export default function Newcreate() {
       description: "",
       startDate: new Date(),
       endDate: new Date(),
-      place: "",
+      adress: "",
+      city: "",
+      zipCode: "",
       attendees: [],
     },
 
@@ -56,9 +60,13 @@ export default function Newcreate() {
       endDate: (endDate) =>
         format(endDate, "dd/MM/yyyy") >=
         format(form.values.startDate, "dd/MM/yyyy"),
-      place: (place) => place !== null,
+      adress: (adress) => adress.length !== 0,
+      city: (city) => city.length !== 0,
+      zipCode: (zipCode) => zipCode.length !== 0,
     },
   });
+
+  const [debouncedSearch] = useDebouncedValue(form?.values.adress, 500);
 
   // Use effect about start and end date
   useEffect(() => {
@@ -67,19 +75,33 @@ export default function Newcreate() {
     }
   }, [form]);
 
+  // Use effect loading French adress from the gouv api
   useEffect(() => {
     const loadSuggestion = async () => {
       const response = await axios.get(
-        `https://api-adresse.data.gouv.fr/search/?q=${searchCity}&type=municipality`
+        `https://api-adresse.data.gouv.fr/search/?q=${debouncedSearch}&type=housenumber`
       );
 
-      setSuggestions(response.data.features.map((a) => a.properties.city));
+      // Needed because the autocomplete expect a label and a value, so we set the value equals to the label #this is retarded
+      response.data.features.forEach(
+        (suggestion) =>
+          (suggestion.properties.value = suggestion.properties.label)
+      );
+
+      setSuggestions(
+        response.data.features.map((suggestion) => suggestion.properties)
+      );
     };
 
-    if (searchCity) {
+    if (debouncedSearch) {
       loadSuggestion();
     }
-  }, [searchCity]);
+  }, [debouncedSearch]);
+
+  // Side effect to add a name on the dropzone input
+  useEffect(() => {
+    dropZoneRef.current.children[0].name = "headerUpload";
+  }, []);
 
   // Update the icon displayed based on the file dragged
   const ImageUploadIcon = ({ status, ...props }) => {
@@ -93,6 +115,17 @@ export default function Newcreate() {
 
     return <CameraIcon {...props} />;
   };
+
+  // eslint-disable-next-line react/display-name
+  const AutoCompleteItem = forwardRef(({ label, ...others }, ref) => (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <div>
+          <Text>{label}</Text>
+        </div>
+      </Group>
+    </div>
+  ));
 
   // Update IconColor based on the drag event
   const getIconColor = (status, theme) => {
@@ -111,28 +144,73 @@ export default function Newcreate() {
     setCurrentHeader(file);
   };
 
+  //Handle the validation of an adress and set fill input
+  const handleItemConfirmation = (choice) => {
+    form.setValues((currentValues) => ({
+      ...currentValues,
+
+      adress: choice.name,
+      city: choice.city,
+      zipCode: choice.postcode,
+    }));
+  };
+
+  //Create a formData before sending to the API
+  const handleSubmit = () => {
+    let formData = new FormData();
+    for (const [key, value] of Object.entries(form.values)) {
+      if (key === "header") {
+        formData.append("headerUpload", value[0]);
+      } else {
+        formData.set(key, value);
+      }
+    }
+    axios
+      .post("http://localhost:8000/api/event/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => {
+        notifications.showNotification({
+          title: "Succès",
+          message: "Veuillez valider votre compte",
+          color: "green",
+          icon: <CheckIcon />,
+        });
+      })
+      .catch((err) => {
+        notifications.showNotification({
+          title: "Erreur !",
+          message: err.message,
+          color: "red",
+          icon: <CrossCircledIcon />,
+        });
+      });
+  };
+
   return (
     <Container>
       <form
-        onSubmit={form.onSubmit((values) => console.log(values))}
+        onSubmit={form.onSubmit(handleSubmit)}
         encType='multipart/form-data'
+        method={"post"}
       >
         <h1>Créer un nouvel évènement</h1>
 
         <InputWrapper
           label='Ajouter une photo de couverture'
-          className='mb-3'
+          style={{ marginBottom: "1em" }}
           error={
             form.errors.header &&
             "La photo de couverture n'est pas de type File"
           }
         >
           <Dropzone
+            ref={dropZoneRef}
             onDrop={handleHeaderUpload}
             maxSize={3 * 1024 ** 2}
             accept={["image/png", "image/jpeg", "image/sgv+xml"]}
             multiple={false}
-            classNames={currentHeader ? { root: "p-0" } : ""}
+            styles={currentHeader ? { root: { padding: "0px" } } : ""}
             id='dropzone-header'
             value={form.values.header}
           >
@@ -142,11 +220,11 @@ export default function Newcreate() {
                   <img
                     src={URL.createObjectURL(new Blob(form.values.header))}
                     alt='Alternative text for image'
-                    className='w-100'
                     style={{
                       maxHeight: "228px",
                       objectFit: "cover",
                       minHeight: "228px",
+                      width: "100%",
                     }}
                   />
                 ) : (
@@ -192,27 +270,25 @@ export default function Newcreate() {
           onChange={(event) =>
             form.setFieldValue("title", event.currentTarget.value)
           }
-          className='mb-3'
+          style={{ marginBottom: "1em" }}
         />
 
         <InputWrapper
           label="Description de l'évènement"
           required
-          className='mb-3'
+          style={{ marginBottom: "1em" }}
           error={
             form.errors.description &&
             "Veuillez spécifier une description pour votre évènement (minimum 10 caractères)"
           }
         >
-          <QuillEditor
-            handleChange={(content) =>
-              form.setFieldValue("description", content)
-            }
+          <RichTextEditor
             value={form.values.description}
+            onChange={(e) => form.setFieldValue("description", e)}
           />
         </InputWrapper>
 
-        <Grid className='mb-3'>
+        <Grid style={{ marginBottom: "1em" }}>
           <Col span={6}>
             <InputWrapper
               label='Date de commencement'
@@ -260,17 +336,48 @@ export default function Newcreate() {
               />
             </InputWrapper>
           </Col>
-        </Grid>
+          <Col span={5}>
+            <Autocomplete
+              value={form.values.adress}
+              onChange={(adress) => form.setFieldValue("adress", adress)}
+              label="Indiquez l'adresse de rendez-vous"
+              placeholder="Rue de l'internet..."
+              required
+              data={suggestions}
+              filter={(_, item) => item}
+              itemComponent={AutoCompleteItem}
+              onItemSubmit={handleItemConfirmation}
+            />
+          </Col>
 
-        <Autocomplete
-          value={searchCity}
-          onChange={setSearchCity}
-          label='Indiquez le lieu de rendez-vous'
-          placeholder='Paris, Grenoble, Amiens...'
-          required
-          data={data}
-          className='mb-3'
-        />
+          <Col span={4}>
+            <TextInput
+              required
+              placeholder='Paris, Grenoble....'
+              label='Ville'
+              error={form.errors.city && "Veuillez spécifier une ville..."}
+              value={form.values.city}
+              onChange={(event) =>
+                form.setFieldValue("city", event.currentTarget.value)
+              }
+            />
+          </Col>
+
+          <Col span={3}>
+            <TextInput
+              required
+              placeholder='96440'
+              label='Code postal'
+              error={
+                form.errors.zipCode && "Veuillez renseigner le code postal"
+              }
+              value={form.values.zipCode}
+              onChange={(event) =>
+                form.setFieldValue("zipCode", event.currentTarget.value)
+              }
+            />
+          </Col>
+        </Grid>
 
         <MultiSelect
           label='Ajouter des participants'
@@ -280,12 +387,12 @@ export default function Newcreate() {
           creatable
           getCreateLabel={(query) => `+ Ajouter l'adresse mail : ${query}`}
           onCreate={(query) => setAttendees((current) => [...current, query])}
-          className='mb-3'
+          style={{ marginBottom: "1em" }}
         />
 
         <Checkbox
           label='Cet évènement est privé'
-          className='mb-3'
+          style={{ marginBottom: "1em" }}
           color='indigo'
         />
 

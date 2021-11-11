@@ -3,7 +3,7 @@ import { createGetInitialProps } from "@mantine/next";
 
 const getInitialProps = createGetInitialProps();
 
-class MyDocument extends Document {
+export default class _Document extends Document {
   static getInitialProps = getInitialProps;
 
   render() {
@@ -29,5 +29,3 @@ class MyDocument extends Document {
     );
   }
 }
-
-export default MyDocument;

@@ -16,7 +16,9 @@ model Event {
   description String
   startDate   DateTime
   endDate     DateTime
-  place       String
+  adress      String
+  city        String
+  zipCode     Int
   attendees   String[]
   isPrivate   Boolean
 }

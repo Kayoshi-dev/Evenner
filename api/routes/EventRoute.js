@@ -1,21 +1,38 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
+import multer from "multer";
 
 const prisma = new PrismaClient();
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.send("ifjezife");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + file.originalname);
+  },
 });
+
+const upload = multer({ storage });
 
 /**
  * Create a new Event
+ * Type : REST
  * Path : /api/event/
  */
-router.post("/", async (req, res) => {
-  console.log("je suis le body", req.body);
-  let { title, description, startDate, endDate, place, attendees, isPrivate } =
-    req.body;
+router.post("/", upload.single("headerUpload"), async (req, res) => {
+  let {
+    title,
+    description,
+    startDate,
+    endDate,
+    adress,
+    city,
+    zipCode,
+    attendees,
+    isPrivate,
+  } = req.body;
 
   isPrivate === "on" ? (isPrivate = true) : (isPrivate = false);
 
@@ -23,9 +40,11 @@ router.post("/", async (req, res) => {
     data: {
       title,
       description,
-      startDate,
-      endDate,
-      place,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      adress,
+      city,
+      zipCode: Number(zipCode),
       attendees,
       isPrivate,
     },

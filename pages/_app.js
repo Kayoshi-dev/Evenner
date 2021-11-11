@@ -1,32 +1,39 @@
-import { SSRProvider } from "@react-aria/ssr";
-import { registerLocale } from "react-datepicker";
+import Head from "next/head";
+import { MantineProvider, NormalizeCSS, GlobalStyles } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import { MantineProvider, Button } from "@mantine/core";
-
-import Layout from "../components/layout";
-
+import { registerLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
 
 registerLocale("fr", fr);
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-quill/dist/quill.snow.css";
-import "react-datepicker/dist/react-datepicker.css";
-
 import "../styles/scss/main.scss";
+import Layout from "../components/layout/layout";
 
-function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
-    <SSRProvider>
-      <MantineProvider theme={{ fontFamily: "Quicksand" }}>
-        <NotificationsProvider position='top-right'>
+    <>
+      <Head>
+        <title>Page title</title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width'
+        />
+      </Head>
+
+      <MantineProvider
+        theme={{
+          colorScheme: "light",
+          fontFamily: "Quicksand",
+        }}
+      >
+        <NotificationsProvider position='top-right' zIndex={2077}>
+          <NormalizeCSS />
+          <GlobalStyles />
           <Layout>
             <Component {...pageProps} />
           </Layout>
         </NotificationsProvider>
       </MantineProvider>
-    </SSRProvider>
+    </>
   );
 }
-
-export default MyApp;
